@@ -2,26 +2,35 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 import { v4 as uuidv4 } from 'uuid';
 
-interface ConstructorState {
-  bun: TConstructorIngredient | null;
-  ingredients: TConstructorIngredient[];
+export interface burgerConstructorState {
+  burgerConstructor: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  };
+  error: string | null;
 }
 
-const initialState: ConstructorState = {
-  bun: null,
-  ingredients: []
+const initialState: burgerConstructorState = {
+  burgerConstructor: {
+    bun: null,
+    ingredients: []
+  },
+  error: null
 };
 
-const constructorSlice = createSlice({
-  name: 'constructor',
+const burgerConstructorSlice = createSlice({
+  name: 'burgerConstructor',
   initialState,
+  selectors: {
+    burgerConstructorSelector: (state) => state.burgerConstructor
+  },
   reducers: {
     addIngredient: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         if (action.payload.type === 'bun') {
-          state.bun = action.payload;
+          state.burgerConstructor.bun = action.payload;
         } else {
-          state.ingredients.push(action.payload);
+          state.burgerConstructor.ingredients.push(action.payload);
         }
       },
       prepare: (ingredient: TIngredient) => {
@@ -30,12 +39,12 @@ const constructorSlice = createSlice({
       }
     },
     upIngredient: (state, action: PayloadAction<number>) => {
-      const array = state.ingredients;
+      const array = state.burgerConstructor.ingredients;
       const index = action.payload;
       array.splice(index - 1, 0, array.splice(index, 1)[0]);
     },
     downIngredient: (state, action: PayloadAction<number>) => {
-      const array = state.ingredients;
+      const array = state.burgerConstructor.ingredients;
       const index = action.payload;
       array.splice(index + 1, 0, array.splice(index, 1)[0]);
     },
@@ -43,15 +52,24 @@ const constructorSlice = createSlice({
       state,
       action: PayloadAction<TConstructorIngredient>
     ) => {
-      state.ingredients = state.ingredients.filter(
-        (ingredient) => ingredient.id !== action.payload.id
-      );
+      state.burgerConstructor.ingredients =
+        state.burgerConstructor.ingredients.filter(
+          (ingredient) => ingredient.id !== action.payload.id
+        );
     },
-    clearConstructor: (state) => {
-      state.bun = null;
-      state.ingredients = [];
+    clearBurgerConstructor: (state) => {
+      state.burgerConstructor.bun = null;
+      state.burgerConstructor.ingredients = [];
     }
   }
 });
 
-export default constructorSlice.reducer;
+export const { burgerConstructorSelector } = burgerConstructorSlice.selectors;
+export const {
+  addIngredient,
+  upIngredient,
+  downIngredient,
+  removeIngredient,
+  clearBurgerConstructor
+} = burgerConstructorSlice.actions;
+export default burgerConstructorSlice.reducer;
