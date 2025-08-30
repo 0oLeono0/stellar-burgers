@@ -1,71 +1,88 @@
-import {
-  ConstructorPage,
-  Feed,
-  ForgotPassword,
-  Login,
-  NotFound404,
-  Profile,
-  ProfileOrders,
-  Register,
-  ResetPassword
-} from '@pages';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
+import { AppHeader, IngredientDetails, OrderInfo } from '@components';
 import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  Routes
-} from 'react-router-dom';
-import { create } from 'domain';
+  ConstructorPage,
+  Feed,
+  Login,
+  Register,
+  ForgotPassword,
+  ResetPassword,
+  Profile,
+  ProfileOrders,
+  NotFound404
+} from '@pages';
+import { Modal } from '@components';
+import { useDispatch } from '../../services/store';
+import { useEffect } from 'react';
+import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
-export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route element={<AppHeader />}>
-      <Route path='/' element={<ConstructorPage />} />
-      <Route path='/feed'>
-        <Route index element={<Feed />} />
+const App = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const background = location.state?.background;
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, []);
+
+  return (
+    <div className={styles.app}>
+      <AppHeader />
+      <Routes location={background}>
+        <Route path='/' element={<ConstructorPage />} />
+        <Route path='/feed'>
+          <Route index element={<Feed />} />
+          <Route
+            path=':number'
+            element={
+              <Modal
+                title='Детали заказа'
+                onClose={() => window.history.back()}
+              >
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Route>
         <Route
-          path=':number'
+          path='/ingredients/:id'
           element={
             <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
+              title='Детали ингредиента'
+              onClose={() => window.history.back()}
             >
-              <OrderInfo />
+              <IngredientDetails />
             </Modal>
           }
         />
-      </Route>
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      <Route path='/reset-password' element={<ResetPassword />} />
-      <Route path='/profile'>
-        <Route index element={<Profile />} />
-        <Route path='orders'>
-          <Route index element={<ProfileOrders />} />
-          <Route path=':number' element={<OrderInfo />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
+        <Route path='/profile'>
+          <Route index element={<Profile />} />
+          <Route path='orders'>
+            <Route index element={<ProfileOrders />} />
+            <Route
+              path=':number'
+              element={
+                <Modal
+                  title='Детали заказа'
+                  onClose={() => window.history.back()}
+                >
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+          </Route>
         </Route>
-      </Route>
-      <Route path='*' element={<NotFound404 />} />
-      <Route
-        path='/ingredients/:id'
-        element={
-          <Modal
-            title={''}
-            onClose={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-          >
-            <IngredientDetails />
-          </Modal>
-        }
-      />
-    </Route>
-  )
-);
+        <Route path='*' element={<NotFound404 />} />
+      </Routes>
+    </div>
+  );
+};
+
+export default App;
