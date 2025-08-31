@@ -10,7 +10,7 @@ import {
 } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser, TOrder } from '@utils-types';
-import { setCookie, deleteCookie } from 'src/utils/cookie';
+import { setCookie, deleteCookie } from '../../utils/cookie';
 
 export interface UserState {
   isAuthenticated: boolean;
@@ -47,7 +47,7 @@ export const logoutUserThunk = createAsyncThunk('users/logoutUser', async () =>
   })
 );
 
-export const getUserThunk = createAsyncThunk('users/getUser', async () =>
+export const getUser = createAsyncThunk('users/getUser', async () =>
   getUserApi()
 );
 
@@ -75,8 +75,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   selectors: {
-    isAuthCheckedSelector: (state) => state.isAuthenticated,
-    loginUserRequestSelector: (state) => state.loginUserRequest,
+    isAuthSelector: (state) => state.isAuthenticated,
+    loginUserRequest: (state) => state.loginUserRequest,
     userNameSelector: (state) => state.user?.name || '',
     userEmailSelector: (state) => state.user?.email || '',
     userSelector: (state) => state.user,
@@ -113,15 +113,15 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
       })
 
-      .addCase(getUserThunk.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.loginUserRequest = true;
       })
-      .addCase(getUserThunk.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.user = null;
         state.loginUserRequest = false;
         state.error = action.error.message!;
       })
-      .addCase(getUserThunk.fulfilled, (state, action) => {
+      .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.loginUserRequest = false;
         state.isAuthenticated = true;
@@ -171,11 +171,11 @@ const userSlice = createSlice({
 
 export const { clearErrors } = userSlice.actions;
 export const {
-  isAuthCheckedSelector,
+  isAuthSelector,
   userNameSelector,
   userEmailSelector,
   userSelector,
-  loginUserRequestSelector,
+  loginUserRequest,
 
   userOrdersSelector,
   ordersRequestSelector,

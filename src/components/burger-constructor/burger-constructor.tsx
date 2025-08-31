@@ -3,14 +3,16 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { burgerConstructorSelector } from '../../services/slices/constructorSlice';
 import { useSelector } from '../../services/store';
+import {
+  isOrderLoadingSelector,
+  orderSelector
+} from '../../services/slices/feedSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const constructorItems = useSelector(burgerConstructorSelector);
-
-  const orderRequest = false;
-
-  const orderModalData = null;
+  const orderRequest = useSelector(isOrderLoadingSelector);
+  const orderModalData = useSelector(orderSelector);
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
