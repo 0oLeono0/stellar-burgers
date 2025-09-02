@@ -1,10 +1,7 @@
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import {
-  burgerConstructorSelector,
-  clearBurgerConstructor
-} from '../../services/slices/constructorSlice';
+import { burgerConstructorSelector } from '../../services/slices/constructorSlice';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -27,7 +24,8 @@ export const BurgerConstructor: FC = () => {
 
   const onOrderClick = () => {
     if (!isAuth) {
-      navigate('/login');
+      navigate('/login', { state: { from: '/', orderAttempt: true } });
+      return;
     }
 
     const { bun, ingredients } = constructorItems;
@@ -43,7 +41,6 @@ export const BurgerConstructor: FC = () => {
   const closeOrderModal = () => {
     navigate('/', { replace: true });
     dispatch(clearOrder());
-    dispatch(clearBurgerConstructor());
   };
 
   const price = useMemo(

@@ -1,6 +1,7 @@
 import { orderBurgerApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
+import { clearBurgerConstructor } from './constructorSlice'; // Импортируем действие
 
 export interface OrderState {
   order: TOrder | null;
@@ -16,7 +17,11 @@ const initialState: OrderState = {
 
 export const orderBurgerThunk = createAsyncThunk(
   'orders/postOrderBurger',
-  async (data: string[]) => orderBurgerApi(data)
+  async (data: string[], { dispatch }) => {
+    const response = await orderBurgerApi(data);
+    dispatch(clearBurgerConstructor());
+    return response;
+  }
 );
 
 const orderSlice = createSlice({

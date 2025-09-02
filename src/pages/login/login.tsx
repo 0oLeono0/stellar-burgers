@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   clearErrors,
   errorSelector,
@@ -15,11 +15,12 @@ export const Login: FC = () => {
   const dispatch = useDispatch();
   const error = useSelector(errorSelector);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(loginUserThunk({ email, password })).then(() => {
-      navigate('/profile');
+      navigate(location.state?.from || '/');
     });
   };
 
