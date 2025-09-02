@@ -46,5 +46,6 @@ const ingredientsSlice = createSlice({
       });
   }
 });
-
+export const { ingredientsSelector, isIngredientsLoadingSelector } =
+  ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;

@@ -1,34 +1,33 @@
-import { ReactNode } from 'react';
-import {
-  isAuthSelector,
-  loginUserRequest
-} from '../../services/slices/userSlice';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from '../../services/store';
-import { Navigate, useLocation } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
+import {
+  isAuthCheckedSelector,
+  loginUserRequestSelector
+} from '../../services/slices/userSlice';
 
-interface ProtectedRouteProps {
-  auth?: boolean;
-  children: ReactNode;
-}
+type ProtectedRouteProps = {
+  noAuth?: boolean;
+  children: React.ReactElement;
+};
 
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  auth,
-  children
-}) => {
-  const isAuth = useSelector(isAuthSelector);
-  const loginUser = useSelector(loginUserRequest);
+export const ProtectedRoute = ({ noAuth, children }: ProtectedRouteProps) => {
+  const isAuthChecked = useSelector(isAuthCheckedSelector);
+  const loginUserRequest = useSelector(loginUserRequestSelector);
   const location = useLocation();
 
-  if (!isAuth && loginUser) {
+  if (!isAuthChecked && loginUserRequest) {
+    console.log('User is not authenticated, redirecting to login page');
     return <Preloader />;
   }
 
-  if (!auth && !isAuth) {
+  if (!noAuth && !isAuthChecked) {
+    console.log('User is not authenticated, redirecting to login page');
     return <Navigate replace to='/login' state={{ from: location }} />;
   }
 
-  if (auth && isAuth) {
+  if (noAuth && isAuthChecked) {
+    console.log('User is authenticated, redirecting to home page');
     const from = location.state?.from || { pathname: '/' };
     return <Navigate replace to={from} state={location} />;
   }

@@ -18,8 +18,8 @@ import { Modal } from '@components';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
-import { getUser } from '../../services/slices/userSlice';
 import { ProtectedRoute } from '../protected-route';
+import { getUserThunk } from '../../services/slices/userSlice';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch(getUser());
+    dispatch(getUserThunk());
   }, []);
 
   return (
@@ -40,7 +40,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute auth>
+            <ProtectedRoute noAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -48,7 +48,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute auth>
+            <ProtectedRoute noAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -56,7 +56,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute auth>
+            <ProtectedRoute noAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -64,7 +64,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute auth>
+            <ProtectedRoute noAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -73,7 +73,7 @@ const App = () => {
           <Route
             index
             element={
-              <ProtectedRoute auth>
+              <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
@@ -81,7 +81,7 @@ const App = () => {
           <Route
             path='orders'
             element={
-              <ProtectedRoute auth>
+              <ProtectedRoute>
                 <ProfileOrders />
               </ProtectedRoute>
             }
@@ -117,7 +117,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <ProtectedRoute auth>
+              <ProtectedRoute>
                 <Modal
                   title='Детали заказа'
                   onClose={() => window.history.back()}

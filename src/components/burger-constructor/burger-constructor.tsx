@@ -11,8 +11,8 @@ import {
   orderSelector
 } from '../../services/slices/feedSlice';
 import { useNavigate } from 'react-router-dom';
-import { isAuthSelector } from '../../services/slices/userSlice';
 import { clearOrder, orderBurgerThunk } from '../../services/slices/orderSlice';
+import { isAuthCheckedSelector } from '../../services/slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(burgerConstructorSelector);
@@ -22,7 +22,7 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isAuth = useSelector(isAuthSelector);
+  const isAuth = useSelector(isAuthCheckedSelector);
 
   const onOrderClick = () => {
     if (!isAuth) {

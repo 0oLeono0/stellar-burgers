@@ -47,7 +47,7 @@ export const logoutUserThunk = createAsyncThunk('users/logoutUser', async () =>
   })
 );
 
-export const getUser = createAsyncThunk('users/getUser', async () =>
+export const getUserThunk = createAsyncThunk('users/getUser', async () =>
   getUserApi()
 );
 
@@ -75,8 +75,8 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   selectors: {
-    isAuthSelector: (state) => state.isAuthenticated,
-    loginUserRequest: (state) => state.loginUserRequest,
+    isAuthCheckedSelector: (state) => state.isAuthenticated,
+    loginUserRequestSelector: (state) => state.loginUserRequest,
     userNameSelector: (state) => state.user?.name || '',
     userEmailSelector: (state) => state.user?.email || '',
     userSelector: (state) => state.user,
@@ -113,15 +113,15 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
       })
 
-      .addCase(getUser.pending, (state) => {
+      .addCase(getUserThunk.pending, (state) => {
         state.loginUserRequest = true;
       })
-      .addCase(getUser.rejected, (state, action) => {
+      .addCase(getUserThunk.rejected, (state, action) => {
         state.user = null;
         state.loginUserRequest = false;
         state.error = action.error.message!;
       })
-      .addCase(getUser.fulfilled, (state, action) => {
+      .addCase(getUserThunk.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.loginUserRequest = false;
         state.isAuthenticated = true;
@@ -171,11 +171,11 @@ const userSlice = createSlice({
 
 export const { clearErrors } = userSlice.actions;
 export const {
-  isAuthSelector,
+  isAuthCheckedSelector,
   userNameSelector,
   userEmailSelector,
   userSelector,
-  loginUserRequest,
+  loginUserRequestSelector,
 
   userOrdersSelector,
   ordersRequestSelector,
