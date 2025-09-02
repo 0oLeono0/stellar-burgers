@@ -1,8 +1,12 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useDispatch, useSelector } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { errorSelector, loginUserThunk } from '../../services/slices/userSlice';
+import {
+  clearErrors,
+  errorSelector,
+  loginUserThunk
+} from '../../services/slices/userSlice';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('');
@@ -18,6 +22,10 @@ export const Login: FC = () => {
       navigate('/profile');
     });
   };
+
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, [dispatch]);
 
   return (
     <LoginUI
