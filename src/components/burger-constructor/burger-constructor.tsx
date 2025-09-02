@@ -6,12 +6,13 @@ import {
   clearBurgerConstructor
 } from '../../services/slices/constructorSlice';
 import { useDispatch, useSelector } from '../../services/store';
-import {
-  isOrderLoadingSelector,
-  orderSelector
-} from '../../services/slices/feedSlice';
 import { useNavigate } from 'react-router-dom';
-import { clearOrder, orderBurgerThunk } from '../../services/slices/orderSlice';
+import {
+  clearOrder,
+  isOrderLoadingSelector,
+  orderBurgerThunk,
+  orderSelector
+} from '../../services/slices/orderSlice';
 import { isAuthCheckedSelector } from '../../services/slices/userSlice';
 
 export const BurgerConstructor: FC = () => {
@@ -36,7 +37,6 @@ export const BurgerConstructor: FC = () => {
       ...ingredients.map((ingredient) => ingredient._id!),
       bun._id!
     ];
-    console.log(ingredients);
     dispatch(orderBurgerThunk(orderData));
   };
 
