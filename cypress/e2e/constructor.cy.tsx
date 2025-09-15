@@ -1,3 +1,6 @@
+import * as tokens from '../fixtures/token.json';
+import * as orderData from '../fixtures/order.json';
+
 describe('Интеграционные тесты для конструктора', () => {
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
@@ -70,6 +73,57 @@ describe('Интеграционные тесты для конструктор�
       overlay.click({ force: true });
 
       cy.get('modal').should('not.exist');
+    });
+  });
+
+  describe('Cоздание заказа', () => {
+    beforeEach(() => {
+      cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' });
+      cy.setCookie('accessToken', tokens.accessToken);
+      localStorage.setItem('refreshToken', tokens.refreshToken);
+      cy.intercept('GET', 'api/auth/tokens', {
+        fixture: 'token.json'
+      });
+      cy.intercept('POST', 'api/orders', { fixture: 'order.json' });
+    });
+
+    it('Симуляция создания заказа', () => {
+      cy.get(`[data-cy=bun] > .common_button`).first().click();
+      cy.get(`[data-cy=main] > .common_button`).first().click();
+      cy.get(`[data-cy=sauce] > .common_button`).first().click();
+      cy.get(
+        '#root > div > main > div > section:nth-child(2) > div > button'
+      ).click();
+
+      const orderModal = cy.get('#modals > div:first-child');
+      const orderNumber = orderModal.get('div:nth-child(2) > h2');
+
+      orderNumber.contains(orderData.order.number);
+
+      orderModal
+        .get('div:first-child > div:first-child > button > svg')
+        .click();
+
+      cy.get('modal').should('not.exist');
+
+      const burgerCunstructor = {
+        constructorBunTop: cy.get('div > section:nth-child(2) > div'),
+        constructoMainIngredient: cy.get(
+          'div > section:nth-child(2) > ul > div'
+        ),
+        constructorBunBottom: cy.get(
+          'div > section:nth-child(2) > div:nth-child(3)'
+        )
+      };
+
+      burgerCunstructor.constructorBunTop.contains('Выберите булки');
+      burgerCunstructor.constructoMainIngredient.contains('Выберите начинку');
+      burgerCunstructor.constructorBunBottom.contains('Выберите булки');
+    });
+
+    afterEach(() => {
+      cy.clearAllCookies();
+      localStorage.removeItem('refreshToken');
     });
   });
 });
