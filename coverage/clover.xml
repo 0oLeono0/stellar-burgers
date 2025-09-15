@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1757941697799" clover="3.2.0">
-  <project timestamp="1757941697800" name="All files">
-    <metrics statements="913" coveredstatements="657" conditionals="26" coveredconditionals="25" methods="50" coveredmethods="11" elements="989" coveredelements="693" complexity="0" loc="913" ncloc="913" packages="4" files="9" classes="9"/>
+<coverage generated="1757942071638" clover="3.2.0">
+  <project timestamp="1757942071638" name="All files">
+    <metrics statements="913" coveredstatements="664" conditionals="30" coveredconditionals="29" methods="50" coveredmethods="12" elements="993" coveredelements="705" complexity="0" loc="913" ncloc="913" packages="4" files="9" classes="9"/>
     <package name="src">
       <metrics statements="131" coveredstatements="131" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="testData.ts" path="D:\Projects\Practicum\stellar-burgers\src\testData.ts">
@@ -190,7 +190,7 @@
       </file>
     </package>
     <package name="src.services.slices">
-      <metrics statements="456" coveredstatements="395" conditionals="26" coveredconditionals="25" methods="31" coveredmethods="11"/>
+      <metrics statements="456" coveredstatements="402" conditionals="30" coveredconditionals="29" methods="31" coveredmethods="12"/>
       <file name="constructorSlice.ts" path="D:\Projects\Practicum\stellar-burgers\src\services\slices\constructorSlice.ts">
         <metrics statements="75" coveredstatements="75" conditionals="8" coveredconditionals="8" methods="7" coveredmethods="6"/>
         <line num="1" count="1" type="stmt"/>
@@ -475,7 +475,7 @@
         <line num="59" count="1" type="stmt"/>
       </file>
       <file name="userSlice.ts" path="D:\Projects\Practicum\stellar-burgers\src\services\slices\userSlice.ts">
-        <metrics statements="185" coveredstatements="132" conditionals="1" coveredconditionals="1" methods="10" coveredmethods="1"/>
+        <metrics statements="185" coveredstatements="139" conditionals="5" coveredconditionals="5" methods="10" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -565,9 +565,9 @@
         <line num="87" count="1" type="stmt"/>
         <line num="88" count="1" type="stmt"/>
         <line num="89" count="1" type="stmt"/>
-        <line num="90" count="1" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
+        <line num="90" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
         <line num="93" count="1" type="stmt"/>
         <line num="94" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="95" count="1" type="stmt"/>
@@ -633,16 +633,16 @@
         <line num="155" count="0" type="stmt"/>
         <line num="156" count="1" type="stmt"/>
         <line num="157" count="1" type="stmt"/>
-        <line num="158" count="1" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
+        <line num="158" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="159" count="1" type="stmt"/>
         <line num="160" count="1" type="stmt"/>
-        <line num="161" count="1" type="stmt"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
+        <line num="161" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="162" count="1" type="stmt"/>
+        <line num="163" count="1" type="stmt"/>
         <line num="164" count="1" type="stmt"/>
-        <line num="165" count="1" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
+        <line num="165" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="166" count="1" type="stmt"/>
+        <line num="167" count="1" type="stmt"/>
         <line num="168" count="1" type="stmt"/>
         <line num="169" count="1" type="stmt"/>
         <line num="170" count="1" type="stmt"/>
