@@ -1,6 +1,13 @@
 import * as tokens from '../fixtures/token.json';
 import * as orderData from '../fixtures/order.json';
 
+// Константы для повторяющихся селекторов
+const BUN_SELECTOR = '[data-cy=bun]';
+const COMMON_BUTTON_SELECTOR = '.common_button';
+const MODAL_SELECTOR = '#modals > div:first-child';
+const CONSTRUCTOR_TEXT_SELECTOR =
+  '.constructor-element > .constructor-element__row > .constructor-element__text';
+
 describe('Интеграционные тесты для конструктора', () => {
   beforeEach(() => {
     cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
@@ -10,31 +17,15 @@ describe('Интеграционные тесты для конструктор�
   describe('Загрузка ингредиентов', () => {
     it('Добавление ингредиентов в заказ', () => {
       cy.request('/api/ingredients');
-      cy.get(`[data-cy=bun] > .common_button`).first().click();
-      cy.get(`[data-cy=main] > .common_button`).first().click();
-      cy.get(`[data-cy=sauce] > .common_button`).first().click();
+      cy.get(`${BUN_SELECTOR} > ${COMMON_BUTTON_SELECTOR}`).first().click();
+      cy.get(`[data-cy=main] > ${COMMON_BUTTON_SELECTOR}`).first().click();
+      cy.get(`[data-cy=sauce] > ${COMMON_BUTTON_SELECTOR}`).first().click();
 
       const burgerConstructor = {
-        bunTop: cy
-          .get(
-            '.constructor-element > .constructor-element__row > .constructor-element__text'
-          )
-          .first(),
-        mainIngredient: cy
-          .get(
-            '.constructor-element > .constructor-element__row > .constructor-element__text'
-          )
-          .eq(1),
-        sauceIngredient: cy
-          .get(
-            '.constructor-element > .constructor-element__row > .constructor-element__text'
-          )
-          .eq(2),
-        bunBottom: cy
-          .get(
-            '.constructor-element > .constructor-element__row > .constructor-element__text'
-          )
-          .last()
+        bunTop: cy.get(CONSTRUCTOR_TEXT_SELECTOR).first(),
+        mainIngredient: cy.get(CONSTRUCTOR_TEXT_SELECTOR).eq(1),
+        sauceIngredient: cy.get(CONSTRUCTOR_TEXT_SELECTOR).eq(2),
+        bunBottom: cy.get(CONSTRUCTOR_TEXT_SELECTOR).last()
       };
 
       burgerConstructor.bunTop.contains('Краторная булка N-200i (верх)');
@@ -48,27 +39,27 @@ describe('Интеграционные тесты для конструктор�
 
   describe('Модальное окно для ингредиента', () => {
     it('Открытие модального окна', () => {
-      cy.get(`[data-cy=bun]`).first().click();
+      cy.get(BUN_SELECTOR).first().click();
 
-      const modal = cy.get('#modals > div:first-child');
+      const modal = cy.get(MODAL_SELECTOR);
       const header = modal.get('div:first-child > h3');
 
       header.contains('Краторная булка N-200i');
     });
 
     it('Закрытие по клику на крестик', () => {
-      cy.get(`[data-cy=bun]`).first().click();
+      cy.get(BUN_SELECTOR).first().click();
 
-      const modal = cy.get('#modals > div:first-child').as('modal');
+      const modal = cy.get(MODAL_SELECTOR).as('modal');
       modal.get('div:first-child > button > svg').click();
 
       cy.get('@modal').should('not.exist');
     });
 
     it('Закрытие по клику на оверлей', () => {
-      cy.get(`[data-cy=bun]`).first().click();
+      cy.get(BUN_SELECTOR).first().click();
 
-      const modal = cy.get('#modals > div:first-child').as('modal');
+      const modal = cy.get(MODAL_SELECTOR).as('modal');
       const overlay = cy.get('#modals > div:nth-child(2)');
 
       overlay.click({ force: true });
@@ -89,14 +80,14 @@ describe('Интеграционные тесты для конструктор�
     });
 
     it('Симуляция создания заказа', () => {
-      cy.get(`[data-cy=bun] > .common_button`).first().click();
-      cy.get(`[data-cy=main] > .common_button`).first().click();
-      cy.get(`[data-cy=sauce] > .common_button`).first().click();
+      cy.get(`${BUN_SELECTOR} > ${COMMON_BUTTON_SELECTOR}`).first().click();
+      cy.get(`[data-cy=main] > ${COMMON_BUTTON_SELECTOR}`).first().click();
+      cy.get(`[data-cy=sauce] > ${COMMON_BUTTON_SELECTOR}`).first().click();
       cy.get(
         '#root > div > main > div > section:nth-child(2) > div > button'
       ).click();
 
-      const orderModal = cy.get('#modals > div:first-child').as('orderModal');
+      const orderModal = cy.get(MODAL_SELECTOR).as('orderModal');
       const orderNumber = orderModal.get('div:nth-child(2) > h2');
 
       orderNumber.contains(orderData.order.number);
