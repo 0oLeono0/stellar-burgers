@@ -3,9 +3,10 @@ import * as orderData from '../fixtures/order.json';
 
 describe('Интеграционные тесты для конструктора', () => {
   beforeEach(() => {
-    cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-    cy.visit('http://localhost:4000/');
+    cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
+    cy.visit('/');
   });
+
   describe('Загрузка ингредиентов', () => {
     it('Добавление ингредиентов в заказ', () => {
       cy.request('/api/ingredients');
@@ -59,32 +60,32 @@ describe('Интеграционные тесты для конструктор�
       cy.get(`[data-cy=bun]`).first().click();
 
       const modal = cy.get('#modals > div:first-child').as('modal');
-      const button = modal.get('div:first-child > button > svg').click();
+      modal.get('div:first-child > button > svg').click();
 
-      cy.get('modal').should('not.exist');
+      cy.get('@modal').should('not.exist');
     });
 
     it('Закрытие по клику на оверлей', () => {
       cy.get(`[data-cy=bun]`).first().click();
 
       const modal = cy.get('#modals > div:first-child').as('modal');
-      const overlay = modal.get('#modals > div:nth-child(2)');
+      const overlay = cy.get('#modals > div:nth-child(2)');
 
       overlay.click({ force: true });
 
-      cy.get('modal').should('not.exist');
+      cy.get('@modal').should('not.exist');
     });
   });
 
-  describe('Cоздание заказа', () => {
+  describe('Создание заказа', () => {
     beforeEach(() => {
-      cy.intercept('GET', 'api/auth/user', { fixture: 'user.json' });
+      cy.intercept('GET', '/api/auth/user', { fixture: 'user.json' });
       cy.setCookie('accessToken', tokens.accessToken);
       localStorage.setItem('refreshToken', tokens.refreshToken);
-      cy.intercept('GET', 'api/auth/tokens', {
+      cy.intercept('GET', '/api/auth/tokens', {
         fixture: 'token.json'
       });
-      cy.intercept('POST', 'api/orders', { fixture: 'order.json' });
+      cy.intercept('POST', '/api/orders', { fixture: 'order.json' });
     });
 
     it('Симуляция создания заказа', () => {
@@ -95,7 +96,7 @@ describe('Интеграционные тесты для конструктор�
         '#root > div > main > div > section:nth-child(2) > div > button'
       ).click();
 
-      const orderModal = cy.get('#modals > div:first-child');
+      const orderModal = cy.get('#modals > div:first-child').as('orderModal');
       const orderNumber = orderModal.get('div:nth-child(2) > h2');
 
       orderNumber.contains(orderData.order.number);
@@ -104,11 +105,11 @@ describe('Интеграционные тесты для конструктор�
         .get('div:first-child > div:first-child > button > svg')
         .click();
 
-      cy.get('modal').should('not.exist');
+      cy.get('@orderModal').should('not.exist');
 
-      const burgerCunstructor = {
+      const burgerConstructor = {
         constructorBunTop: cy.get('div > section:nth-child(2) > div'),
-        constructoMainIngredient: cy.get(
+        constructorMainIngredient: cy.get(
           'div > section:nth-child(2) > ul > div'
         ),
         constructorBunBottom: cy.get(
@@ -116,9 +117,9 @@ describe('Интеграционные тесты для конструктор�
         )
       };
 
-      burgerCunstructor.constructorBunTop.contains('Выберите булки');
-      burgerCunstructor.constructoMainIngredient.contains('Выберите начинку');
-      burgerCunstructor.constructorBunBottom.contains('Выберите булки');
+      burgerConstructor.constructorBunTop.contains('Выберите булки');
+      burgerConstructor.constructorMainIngredient.contains('Выберите начинку');
+      burgerConstructor.constructorBunBottom.contains('Выберите булки');
     });
 
     afterEach(() => {
