@@ -3,22 +3,13 @@ import { userOrders } from '../../../testData';
 import feedReducer, {
   FeedState,
   getFeedsThunk,
-  getOrderByNumberThunk
+  getOrderByNumberThunk,
+  initialState
 } from '../feedSlice';
 
 describe('Проверка асинхронных действий ленты заказов', () => {
   describe('Проверка получения списка заказов (getFeedsThunk)', () => {
     test('Проверка состояния запроса', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: false,
-        order: null,
-        isOrderLoading: false,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
       const newState = feedReducer(
         initialState,
         getFeedsThunk.pending('pending')
@@ -29,22 +20,13 @@ describe('Проверка асинхронных действий ленты з
     });
 
     test('Проверка ошибки при запросе', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: true,
-        order: null,
-        isOrderLoading: false,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
+      const state = { ...initialState, isFeedsLoading: true };
       const error: Error = {
         name: 'rejected',
         message: 'Ошибка загрузки заказов'
       };
       const newState = feedReducer(
-        initialState,
+        state,
         getFeedsThunk.rejected(error, 'rejected')
       );
 
@@ -53,16 +35,7 @@ describe('Проверка асинхронных действий ленты з
     });
 
     test('Проверка успешного запроса', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: true,
-        order: null,
-        isOrderLoading: false,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
+      const state = { ...initialState, isFeedsLoading: true };
       const feeds: TFeedsResponse = {
         orders: userOrders,
         total: 10,
@@ -71,7 +44,7 @@ describe('Проверка асинхронных действий ленты з
       };
 
       const newState = feedReducer(
-        initialState,
+        state,
         getFeedsThunk.fulfilled(feeds, 'fulfilled')
       );
 
@@ -85,16 +58,6 @@ describe('Проверка асинхронных действий ленты з
 
   describe('Проверка получения заказа по номеру (getOrderByNumberThunk)', () => {
     test('Проверка состояния запроса', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: false,
-        order: null,
-        isOrderLoading: false,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
       const newState = feedReducer(
         initialState,
         getOrderByNumberThunk.pending('pending', 1)
@@ -105,22 +68,13 @@ describe('Проверка асинхронных действий ленты з
     });
 
     test('Проверка ошибки при запросе', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: false,
-        order: null,
-        isOrderLoading: true,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
+      const state = { ...initialState, isOrderLoading: true };
       const error: Error = {
         name: 'rejected',
         message: 'Ошибка загрузки заказа'
       };
       const newState = feedReducer(
-        initialState,
+        state,
         getOrderByNumberThunk.rejected(error, 'rejected', 1)
       );
 
@@ -129,23 +83,14 @@ describe('Проверка асинхронных действий ленты з
     });
 
     test('Проверка успешного запроса', async () => {
-      const initialState: FeedState = {
-        orders: [],
-        isFeedsLoading: false,
-        order: null,
-        isOrderLoading: true,
-        total: 0,
-        totalToday: 0,
-        error: null
-      };
-
+      const state = { ...initialState, isOrderLoading: true };
       const orders: TOrderResponse = {
         orders: [userOrders[0]],
         success: true
       };
 
       const newState = feedReducer(
-        initialState,
+        state,
         getOrderByNumberThunk.fulfilled(orders, 'fulfilled', 1)
       );
 

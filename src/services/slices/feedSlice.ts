@@ -12,7 +12,7 @@ export interface FeedState {
   error: string | null;
 }
 
-const initialState: FeedState = {
+export const initialState: FeedState = {
   orders: [],
   isFeedsLoading: false,
   order: null,
@@ -58,7 +58,6 @@ const feedSlice = createSlice({
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
       })
-
       .addCase(getOrderByNumberThunk.pending, (state) => {
         state.isOrderLoading = true;
       })
@@ -76,10 +75,8 @@ const feedSlice = createSlice({
 export const {
   ordersSelector,
   isFeedsLoadingSelector,
-
   orderSelector,
   isOrderLoadingSelector,
-
   totalSelector,
   totalTodaySelector
 } = feedSlice.selectors;

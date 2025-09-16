@@ -1,18 +1,13 @@
 import { buns } from '../../../testData';
 import ingredientsReducer, {
   IngredientsState,
-  fetchIngredients
+  fetchIngredients,
+  initialState
 } from '../ingredientsSlice';
 
 describe('Проверка асинхронных действий ингредиентов', () => {
   describe('Проверка получения ингредиентов (fetchIngredients)', () => {
     test('Проверка состояния запроса', async () => {
-      const initialState: IngredientsState = {
-        ingredients: [],
-        loading: false,
-        error: null
-      };
-
       const newState = ingredientsReducer(
         initialState,
         fetchIngredients.pending('pending')
@@ -23,18 +18,13 @@ describe('Проверка асинхронных действий ингред�
     });
 
     test('Проверка ошибки при запросе', async () => {
-      const initialState: IngredientsState = {
-        ingredients: [],
-        loading: true,
-        error: null
-      };
-
+      const state = { ...initialState, loading: true };
       const error: Error = {
         name: 'rejected',
         message: 'Ошибка загрузки ингредиентов'
       };
       const newState = ingredientsReducer(
-        initialState,
+        state,
         fetchIngredients.rejected(error, 'rejected')
       );
 
@@ -43,14 +33,9 @@ describe('Проверка асинхронных действий ингред�
     });
 
     test('Проверка успешного запроса', async () => {
-      const initialState: IngredientsState = {
-        ingredients: [],
-        loading: true,
-        error: null
-      };
-
+      const state = { ...initialState, loading: true };
       const newState = ingredientsReducer(
-        initialState,
+        state,
         fetchIngredients.fulfilled(buns, 'fulfilled')
       );
 

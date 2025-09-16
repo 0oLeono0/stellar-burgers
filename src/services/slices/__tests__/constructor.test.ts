@@ -5,19 +5,13 @@ import burgerConstructorReducer, {
   upIngredient,
   downIngredient,
   removeIngredient,
-  clearBurgerConstructor
+  clearBurgerConstructor,
+  initialState
 } from '../constructorSlice';
 
 jest.mock('uuid');
 
 describe('Проверка синхронных действий конструктора', () => {
-  const clearInitialState = {
-    burgerConstructor: {
-      bun: null,
-      ingredients: []
-    },
-    error: null
-  };
   const filledInitialState = {
     burgerConstructor: {
       bun: {
@@ -42,10 +36,7 @@ describe('Проверка синхронных действий констру�
 
   test('Проверка добавления булки в пустой конструктор', () => {
     const bun = buns[0];
-    const newState = burgerConstructorReducer(
-      clearInitialState,
-      addIngredient(bun)
-    );
+    const newState = burgerConstructorReducer(initialState, addIngredient(bun));
     const { burgerConstructor } = newState;
     expect(burgerConstructor.bun?.id).toEqual(1);
   });
@@ -63,7 +54,7 @@ describe('Проверка синхронных действий констру�
   test('Проверка добавления ингредиента в пустой конструктор', () => {
     const ingredient = notBuns[0];
     const newState = burgerConstructorReducer(
-      clearInitialState,
+      initialState,
       addIngredient(ingredient)
     );
     const { burgerConstructor } = newState;
@@ -121,8 +112,6 @@ describe('Проверка синхронных действий констру�
       filledInitialState,
       clearBurgerConstructor()
     );
-    const { burgerConstructor } = newState;
-    expect(burgerConstructor.bun).toBeNull();
-    expect(burgerConstructor.ingredients.length).toBe(0);
+    expect(newState).toEqual(initialState);
   });
 });

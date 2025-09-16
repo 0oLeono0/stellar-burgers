@@ -1,7 +1,7 @@
 import { orderBurgerApi } from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
-import { clearBurgerConstructor } from './constructorSlice'; // Импортируем действие
+import { clearBurgerConstructor } from './constructorSlice';
 
 export interface OrderState {
   order: TOrder | null;
@@ -9,7 +9,7 @@ export interface OrderState {
   error: string | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   order: null,
   isOrderLoading: false,
   error: null
