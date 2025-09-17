@@ -21,7 +21,7 @@ export interface UserState {
   error: string | null;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
   isAuthenticated: false,
   loginUserRequest: false,
   user: null,
@@ -176,10 +176,8 @@ export const {
   userEmailSelector,
   userSelector,
   loginUserRequestSelector,
-
   userOrdersSelector,
   ordersRequestSelector,
-
   errorSelector
 } = userSlice.selectors;
 export default userSlice.reducer;
